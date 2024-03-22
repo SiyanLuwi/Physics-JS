@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Physics Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #2f2b52;
+            height: 100vh;
+        }
+
+        canvas {
+            border-radius: 50px;
+            border: 3px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        var balls = [
+            {
+                x: canvas.width / 4,
+                y: canvas.height / 2,
+                radius: 20,
+                speedX: 5,
+                speedY: 2,
+                color: 'yellow'
+            },
+            {
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                radius: 20,
+                speedX: 2,
+                speedY: 4,
+                color: 'green'
+            },
+            {
+                x: canvas.width * 3 / 4,
+                y: canvas.height / 2,
+                radius: 20,
+                speedX: -5,
+                speedY: -2,
+                color: 'red'
+            }
+        ];
+
+        function drawBall(ball) {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = ball.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function moveBall(ball) {
+            ball.x += ball.speedX;
+            ball.y += ball.speedY;
+        }
+
+        function bounceBall(ball) {
+            if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+                ball.speedY = -ball.speedY;
+            }
+            if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+                ball.speedX = -ball.speedX;
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            balls.forEach(function(ball) {
+                drawBall(ball);
+                moveBall(ball);
+                bounceBall(ball);
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
